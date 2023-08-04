@@ -25,7 +25,7 @@ module Pipette
       @collecting_unit = CollectingUnit.new(collecting_unit_params)
 
       if @collecting_unit.save
-        redirect_to @collecting_unit, notice: "Collecting unit was successfully created."
+        redirect_to collecting_units_path, notice: "Collecting unit was successfully created."
       else
         render :new, status: :unprocessable_entity
       end
@@ -34,7 +34,7 @@ module Pipette
     # PATCH/PUT /collecting_units/1
     def update
       if @collecting_unit.update(collecting_unit_params)
-        redirect_to @collecting_unit, notice: "Collecting unit was successfully updated."
+        redirect_to collecting_units_path notice: "Collecting unit was successfully updated."
       else
         render :edit, status: :unprocessable_entity
       end

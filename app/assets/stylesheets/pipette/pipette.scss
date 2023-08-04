@@ -1,0 +1,22 @@
+@import 'bootstrap';
+
+.flash-success {
+  color: $success;
+}
+
+#collecting-units,
+#resources {
+  text-align: center;
+
+  table {
+    margin: 15px auto auto auto;
+    width: 98%;
+  }
+}
+
+#collecting-units,
+#resources {
+  table {
+    width: 50%;
+  }
+}

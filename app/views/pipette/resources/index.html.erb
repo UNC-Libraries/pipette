@@ -1,28 +1,31 @@
-<p style="color: green"><%= notice %></p>
-
-<h1>Resources</h1>
+<p class="flash-success"><%= notice %></p>
 
 <div id="resources">
-  <table class="table">
-    <thead>
-      <tr>
-        <td>Collecting Unit</td>
-        <td>Resource Id</td>
-        <td>Resource Name</td>
-        <td>Last Updated on Aspace</td>
-        <td>Last Indexed</td>
-      </tr>
+  <h1 class="resource_list">Resources</h1>
+  <% if @resources.length > 0 %>
+  <table class="table table-striped table-bordered">
+    <thead class="table-light">
+    <tr>
+      <th scope="col">Collecting Unit</th>
+      <th scope="col">Resource Id</th>
+      <th scope="col">Resource Name</th>
+      <th scope="col">Last Updated on Aspace</th>
+      <th scope="col">Last Indexed</th>
+    </tr>
     </thead>
-  <tbody>
-      <% @resources.each do |resource| %>
-        <tr>
-          <td><%= resource.pipette_collecting_unit_id %></td>
-          <td><%= resource.resource_id %></td>
-          <td><%= resource.resource_name %></td>
-          <td><%= resource.last_updated_on_aspace %></td>
-          <td><%= resource.last_indexed_on %></td>
-        </tr>
-      <% end %>
-  </tbody>
+    <tbody class="table-group-divider">
+    <% @resources.each do |resource| %>
+      <tr>
+        <td><%= resource.pipette_collecting_unit_id %></td>
+        <td><%= resource.resource_id %></td>
+        <td><%= resource.resource_name %></td>
+        <td><%= resource.last_updated_on_aspace %></td>
+        <td><%= resource.last_indexed_on %></td>
+      </tr>
+    <% end %>
+    </tbody>
   </table>
+    <% else %>
+  <p>No resources have been synced from Archivesspace</p>
+  <% end %>
 </div>
