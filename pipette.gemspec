@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   end
 
   spec.add_dependency "archivesspace-client", ">= 0.2.0"
-  spec.add_dependency 'devise', '~> 4.8.0'
+  spec.add_dependency 'devise', '~> 4.9.2'
   spec.add_dependency 'devise-guests', '~> 0.8.1'
   spec.add_dependency "httparty", ">= 0.21.0"
   spec.add_dependency 'omniauth', '~> 2.0'

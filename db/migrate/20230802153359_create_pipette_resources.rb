@@ -1,6 +1,7 @@
 class CreatePipetteResources < ActiveRecord::Migration[7.0]
   def change
     create_table :pipette_resources do |t|
+      t.belongs_to :pipette_collecting_unit, foreign_key: true
       t.integer :resource_uri
       t.string :resource_name
       t.string :resource_identifier
@@ -9,7 +10,5 @@ class CreatePipetteResources < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
-
-    add_foreign_key :pipette_resources, :collecting_units
   end
 end

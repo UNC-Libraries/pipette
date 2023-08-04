@@ -1,0 +1,28 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Resources</h1>
+
+<div id="resources">
+  <table class="table">
+    <thead>
+      <tr>
+        <td>Collecting Unit</td>
+        <td>Resource Id</td>
+        <td>Resource Name</td>
+        <td>Last Updated on Aspace</td>
+        <td>Last Indexed</td>
+      </tr>
+    </thead>
+  <tbody>
+      <% @resources.each do |resource| %>
+        <tr>
+          <td><%= resource.pipette_collecting_unit_id %></td>
+          <td><%= resource.resource_id %></td>
+          <td><%= resource.resource_name %></td>
+          <td><%= resource.last_updated_on_aspace %></td>
+          <td><%= resource.last_indexed_on %></td>
+        </tr>
+      <% end %>
+  </tbody>
+  </table>
+</div>

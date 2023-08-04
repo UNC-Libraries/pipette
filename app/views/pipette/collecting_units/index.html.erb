@@ -1,0 +1,14 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Collecting units</h1>
+
+<div id="collecting_units">
+  <% @collecting_units.each do |collecting_unit| %>
+    <%= render collecting_unit %>
+    <p>
+      <%= link_to "Show this collecting unit", collecting_unit %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New collecting unit", new_collecting_unit_path %>

@@ -1,0 +1,22 @@
+<%= form_with(model: collecting_unit) do |form| %>
+  <% if collecting_unit.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(collecting_unit.errors.count, "error") %> prohibited this collecting_unit from being saved:</h2>
+
+      <ul>
+        <% collecting_unit.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :collecting_unit, style: "display: block" %>
+    <%= form.text_field :collecting_unit %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>
