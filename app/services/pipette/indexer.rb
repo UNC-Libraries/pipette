@@ -1,0 +1,51 @@
+# frozen_string_literal: true
+
+module Pipette
+  class Indexer
+    def self.index_new
+      new(client: Aspace::Client.new).index_new
+    end
+
+    def self.full_reindex
+      new(client: Aspace::Client.new).full_reindex
+    end
+
+    def self.soft_full_reindex
+      new(client: Aspace::Client.new).soft_full_reindex
+    end
+
+    attr_reader :client
+
+    def initialize(client:)
+      @client = client
+    end
+
+    def index_new
+      reindex(modified: modified_since)
+    end
+
+    def soft_full_reindex
+      reindex(modified: nil, soft: true)
+    end
+
+    def full_reindex
+      reindex(modified: nil)
+    end
+
+    def modified_since
+      Event.where(name: 'index').first&.updated_at&.to_i
+    end
+
+    private
+
+    def reindex(modified:, soft: false)
+      client.ead_urls(modified_since: modified).each do |repository, urls|
+        urls.each do |url|
+          Rails.logger.info("Queued #{url} in repository #{repository} for indexing.")
+          AspaceIndexJob.perform_later(resource_descriptions_uri: url, repository_id: repository, soft: soft)
+        end
+      end
+      Event.find_or_create_by(name: 'index').touch
+    end
+  end
+end
