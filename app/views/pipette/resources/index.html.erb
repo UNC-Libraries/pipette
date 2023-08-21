@@ -1,4 +1,4 @@
-<p class="flash-success"><%= notice %></p>
+<p class="flash-success d-none"><%= notice %></p>
 
 <div id="resources">
   <h1 class="resource_list">Resources</h1>
@@ -36,7 +36,7 @@
       <%= render 'selection_btns' %>
       <div class="row">
         <div class="col index-submit">
-          <%= form_with url: "/admin/process_finding_aids", method: :post do |form| %>
+          <%= form_with url: "/admin/process_selected_finding_aids", method: :post do |form| %>
             <%= form.hidden_field :aspace_id, value: '' %>
             <%= form.submit "Index selected collections", { id: 'selected-resources',class: 'btn btn-primary', disabled: true } %>
           <% end %>

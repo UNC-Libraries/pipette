@@ -20,20 +20,23 @@
                 } else {
                     this.selected_resources.splice(resource_index, 1);
                 }
-            }
-        }
 
-        selectedResources(resources_table) {
-            resources_table.on('click', (e) => {
-                this.setResourceSelected(e.target.id);
                 this.#setStorage();
                 this.setModalDisplay();
                 this.#setSelectedFormValue();
+            }
+        }
+
+        selectedResourcesEventHandler(resources_table) {
+            resources_table.on('click', (e) => {
+                this.setResourceSelected(e.target.id);
             });
         }
 
         clearSelectedOnSubmit() {
-            $('#selected-resources').on('click', () => this.selected_resources = [])
+            $('#selected-resources').on('click', () => {
+                this.#clearResources();
+            })
         }
 
         clearSelectAll(table) {
@@ -43,8 +46,7 @@
                     const current_cell = $(this.node()).find('input[type="checkbox"]');
                     current_cell.prop('checked', false);
                 });
-                this.selected_resources = [];
-                ResourceProcessing.#clearStorage();
+                this.#clearResources()
                 this.setModalDisplay();
                 this.#setSelectedFormValue();
             });
@@ -94,12 +96,19 @@
             $('#selected-resources tbody').html(resource_text);
         }
 
+        showFlashMsg() {
+            const msg = $('.flash-success');
+            msg.removeClass('d-none');
+            setTimeout(() => msg.addClass('d-none'), 5000);
+        }
+
         // Private methods
         #setStorage() {
             sessionStorage.setItem('resourcesToIndex', JSON.stringify(this.selected_resources));
         }
 
-        static #clearStorage() {
+        #clearResources() {
+            this.selected_resources = [];
             sessionStorage.removeItem('resourcesToIndex');
         }
 
@@ -127,11 +136,12 @@
 
         const resource_processing = new ResourceProcessing();
         // Set list of selected resources
-        resource_processing.selectedResources(resources_table);
+        resource_processing.selectedResourcesEventHandler(resources_table);
         // Setup various event listeners
         resource_processing.selectAll();
         resource_processing.clearSelectAll(resources_table);
         resource_processing.clearSelectedOnSubmit();
+        resource_processing.showFlashMsg();
 
         // Set modal display of selected resources
         resource_processing.setModalDisplay();

@@ -1,4 +1,4 @@
-<p class="flash-success"><%= notice %></p>
+<p class="flash-success d-none"><%= notice %></p>
 
 <div id="collecting-units">
   <h1>Collecting units</h1>
@@ -18,7 +18,6 @@
           <td><%= collecting_unit.collecting_unit %></td>
           <td><%= link_to "Edit", edit_collecting_unit_path(collecting_unit.id) %></td>
         </tr>
-
       <% end %>
       </tbody>
     </table>
