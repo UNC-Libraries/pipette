@@ -18,15 +18,43 @@
 #collecting-units,
 #resources {
   text-align: center;
-
-  table {
-    margin: 25px auto auto auto;
-    width: 98%;
-  }
 }
 
 #collecting-units {
   table {
+    margin: 25px auto auto auto;
     width: 50%;
+  }
+}
+
+// Datatables CSS
+#resource-list_wrapper {
+  margin: auto;
+  width: 96%;
+
+  #resource-list_length,
+  #resource-list_filter,
+  #resource-list_filter {
+    margin: 25px auto;
+  }
+}
+
+.resource-update {
+  margin: 25px auto 50px auto;
+  text-align: left;
+}
+
+.check-all {
+  margin: auto auto 10px auto;
+  text-align: left;
+
+  .btn-link {
+    padding: 0;
+  }
+}
+
+@media (min-width: 576px) {
+  .modal-dialog {
+    max-width: 90%;
   }
 }

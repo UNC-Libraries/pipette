@@ -1,0 +1,142 @@
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+<script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script>
+    class ResourceProcessing {
+        constructor() {
+            this.selected_resources = [];
+        }
+
+        setResourceSelected(resource) {
+            if (resource.startsWith('resource_')) {
+                const resource_id = resource.split('_')[1];
+                const resource_info = $(`#${resource}`).parent().data('resource');
+                resource_info.aspace_id = resource_id;
+                const resource_index = this.selected_resources.findIndex(d => d.aspace_id === resource_id);
+
+                if ($(`#${resource}:checked`) && resource_index === -1) {
+                    this.selected_resources.push(resource_info);
+                } else {
+                    this.selected_resources.splice(resource_index, 1);
+                }
+            }
+        }
+
+        selectedResources(resources_table) {
+            resources_table.on('click', (e) => {
+                this.setResourceSelected(e.target.id);
+                this.#setStorage();
+                this.setModalDisplay();
+                this.#setSelectedFormValue();
+            });
+        }
+
+        clearSelectedOnSubmit() {
+            $('#selected-resources').on('click', () => this.selected_resources = [])
+        }
+
+        clearSelectAll(table) {
+            $('.clear-all-resources').on('click', (e) => {
+                e.preventDefault();
+                table.cells(null, 0).every( function () {
+                    const current_cell = $(this.node()).find('input[type="checkbox"]');
+                    current_cell.prop('checked', false);
+                });
+                this.selected_resources = [];
+                ResourceProcessing.#clearStorage();
+                this.setModalDisplay();
+                this.#setSelectedFormValue();
+            });
+        }
+
+        selectAll() {
+            const self = this;
+            $('.check-all-resources').on('click', function(e) {
+                e.preventDefault();
+                // This selects every row visible or not. Probably don't want this
+               /* table.cells(null, 0).every( function () {
+                    const current_cell = $(this.node()).find('input[type="checkbox"]');
+                    current_cell.prop('checked', true);
+                    self.setResourceSelected(current_cell.attr('id'))
+                });*/
+
+                // This selects visible rows
+                $('input[type=checkbox]').each(function() {
+                    const _this = $(this);
+                    _this.prop('checked', true);
+                    const resource = _this.attr('id');
+                    self.setResourceSelected(resource)
+                });
+                self.#setStorage();
+                self.setModalDisplay();
+                self.#setSelectedFormValue();
+            });
+        }
+
+        submitAllCheck() {
+            $('#all-resources').on('click', () => {
+                return window.confirm("Processing all Aspace resources can take take 2+ hours. Are you sure you'd like to proceed?");
+            });
+        }
+
+        setModalDisplay() {
+            let resource_text = '';
+            const resources = localStorage.getItem('resourcesToIndex');
+            if (resources !== null) {
+                resource_text = JSON.parse(resources).map((d) => {
+                    return `<tr><td>${d.aspace_id}</td><td>${d.collection}</td><td>${d.name}</td></tr>`;
+                });
+            } else {
+                resource_text = `<tr><td colspan="3">No collections set for indexing</td></tr>`;
+            }
+
+            $('#selected-resources tbody').html(resource_text);
+        }
+
+        // Private methods
+        #setStorage() {
+            localStorage.setItem('resourcesToIndex', JSON.stringify(this.selected_resources));
+        }
+
+        static #clearStorage() {
+            localStorage.removeItem('resourcesToIndex');
+        }
+
+        #setSelectedFormValue() {
+            const aspace_ids = this.selected_resources.map(d => d.aspace_id).join(',');
+            $('#aspace_id').val(aspace_ids);
+            this.#setSelectedSubmitBtn();
+        }
+
+        #setSelectedSubmitBtn() {
+            $('#selected-resources').prop('disabled', this.selected_resources.length === 0);
+        }
+    }
+</script>
+<script>
+    $(function() {
+        const resources_table = $('#resource-list').DataTable({
+            columnDefs: [
+                { orderable: false, targets: 0 },
+                { searchable: false, targets: [0, 4, 5] }
+            ],
+            pageLength: 10,
+            order: [[5, 'desc'], [3, 'asc']] //indexed on arclight, then by collection name
+        });
+
+        const resource_processing = new ResourceProcessing();
+        // Set list of selected resources
+        resource_processing.selectedResources(resources_table);
+        // Setup various event listeners
+        resource_processing.selectAll();
+        resource_processing.clearSelectAll(resources_table);
+        resource_processing.clearSelectedOnSubmit();
+
+        // Set modal display of selected resources
+        resource_processing.setModalDisplay();
+
+        // Check before processing all EADs
+        resource_processing.submitAllCheck();
+    });
+</script>
