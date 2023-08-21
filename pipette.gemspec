@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'bootstrap', '~> 5.1'
   spec.add_dependency 'devise', '~> 4.9.2'
   spec.add_dependency 'devise-guests', '~> 0.8.1'
+  spec.add_dependency 'git', '~> 1.18'
   spec.add_dependency 'httparty', '>= 0.21.0'
   spec.add_dependency 'omniauth', '~> 2.0'
   spec.add_dependency 'omniauth-rails_csrf_protection'

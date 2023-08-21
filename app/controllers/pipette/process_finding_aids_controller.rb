@@ -8,7 +8,7 @@ module Pipette
         ProcessEadXmlJob.perform_later(ead_id)
       end
 
-      flash[:notice] = "All ArchivesSpace collections sent for indexing (#{ead_ids.length} collections)"
+      flash[:notice] = "All collections sent for indexing (#{ead_ids.length} collections)"
       redirect_to resources_path
     end
 

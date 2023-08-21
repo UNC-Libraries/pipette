@@ -1,0 +1,8 @@
+---
+# In production this is overridden by a template in the vagrant-rails project
+:concurrency: 5
+:queues:
+  - aspace_xml
+:logfile: /arclight/log/sidekiq.log
+:limits:
+  aspace_xml: 1

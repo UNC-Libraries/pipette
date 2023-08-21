@@ -18,6 +18,8 @@ module Pipette
       Rails.logger.error("Unable to read xml for finding aid with ArchivesSpace ID: #{aspace_id}. Reason: #{e.backtrace}")
     rescue IOError => e
       Rails.logger.error("Unable to write EAD xml for finding aid with ArchivesSpace ID: #{aspace_id}. Reason: #{e.backtrace}")
+    rescue Git::FailedError => e
+      Rails.logger.error("Unable to commit EAD xml for finding aid with ArchivesSpace ID to git: #{aspace_id}. Reason: #{e.message}")
     end
   end
 end

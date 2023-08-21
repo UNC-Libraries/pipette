@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'git'
 
 module Pipette
   module DownloadEad
@@ -20,14 +21,21 @@ module Pipette
     end
 
     def write_xml(ead_id, collecting_unit, resource_xml)
-      # set_branch
+      file_path = "#{ENV['FINDING_AID_DATA']}/#{collecting_unit}/#{ead_id}.xml"
+
       FileUtils.mkdir_p "#{ENV['FINDING_AID_DATA']}/#{collecting_unit}"
-      File.write("#{ENV['FINDING_AID_DATA']}/#{collecting_unit}/#{ead_id}.xml", resource_xml)
+      File.write(file_path, resource_xml)
+
+      commit_to_git(file_path)
     end
 
-    def set_branch
-      system("git checkout #{ENV['FINDING_AID_BRANCH']}", chdir: ENV['FINDING_AID_DATA'])
-      system("git pull origin #{ENV['FINDING_AID_BRANCH']}", chdir: ENV['FINDING_AID_DATA'])
+    def commit_to_git(file_path)
+      branch_name = ENV['FINDING_AID_BRANCH'].to_s
+      repo = Git.open(ENV['FINDING_AID_DATA'].to_s, log: Rails.logger)
+      repo.branch(branch_name).checkout
+      repo.add(file_path)
+      repo.commit("Adding/Updating EAD #{file_path}")
+      repo.push(repo.remote('origin'), branch_name)
     end
   end
 end
