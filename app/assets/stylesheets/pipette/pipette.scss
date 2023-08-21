@@ -46,10 +46,16 @@
 
 .check-all {
   margin: auto auto 10px auto;
-  text-align: left;
+  text-align: center;
+}
 
-  .btn-link {
-    padding: 0;
+.index-submit {
+  display: inline-flex;
+  justify-content: center;
+  width: 100%;
+
+  form {
+    margin: auto 5px;
   }
 }
 

@@ -82,13 +82,13 @@
 
         setModalDisplay() {
             let resource_text = '';
-            const resources = localStorage.getItem('resourcesToIndex');
+            const resources = sessionStorage.getItem('resourcesToIndex');
             if (resources !== null) {
                 resource_text = JSON.parse(resources).map((d) => {
                     return `<tr><td>${d.aspace_id}</td><td>${d.collection}</td><td>${d.name}</td></tr>`;
                 });
             } else {
-                resource_text = `<tr><td colspan="3">No collections set for indexing</td></tr>`;
+                resource_text = '<tr><td colspan="3">No collections set for indexing</td></tr>';
             }
 
             $('#selected-resources tbody').html(resource_text);
@@ -96,11 +96,11 @@
 
         // Private methods
         #setStorage() {
-            localStorage.setItem('resourcesToIndex', JSON.stringify(this.selected_resources));
+            sessionStorage.setItem('resourcesToIndex', JSON.stringify(this.selected_resources));
         }
 
         static #clearStorage() {
-            localStorage.removeItem('resourcesToIndex');
+            sessionStorage.removeItem('resourcesToIndex');
         }
 
         #setSelectedFormValue() {
