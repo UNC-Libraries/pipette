@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Pipette
   class ProcessFindingAidsController < ApplicationController
     def process_all_ead
@@ -6,26 +8,20 @@ module Pipette
         ProcessEadXmlJob.perform_later(ead_id)
       end
 
-      flash[:notice] = "All ArchivesSpace resources sent for processing (#{ead_ids.length} resources)"
+      flash[:notice] = "All ArchivesSpace collections sent for indexing (#{ead_ids.length} collections)"
       redirect_to resources_path
     end
 
-    def process_ead
-      ProcessEadXmlJob.perform_later(resource_params)
-      flash[:notice] = "All ArchivesSpace resources sent for processing resources)"
+    def process_selected_ead
+      aspace_ids = params[:aspace_id].split(',')
+      aspace_ids.each do |ead_id|
+        next if ead_id.to_i.zero? # Returns 0 if not an integer
+
+        ProcessEadXmlJob.perform_later(ead_id)
+      end
+
+      flash[:notice] = "#{aspace_ids.length} collections sent for indexing"
       redirect_to resources_path
-    end
-
-    private
-
-    # Use callbacks to share common setup or constraints between actions.
-    def set_resource
-      @resource = Resource.find(params[:id])
-    end
-
-    # Only allow a list of trusted parameters through.
-    def resource_params
-      params.require(:resource).permit(:resource_id)
     end
   end
 end

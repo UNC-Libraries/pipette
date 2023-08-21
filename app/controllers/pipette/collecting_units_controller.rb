@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Pipette
   class CollectingUnitsController < ApplicationController
     before_action :set_collecting_unit, only: %i[show edit update]
@@ -8,8 +10,7 @@ module Pipette
     end
 
     # GET /collecting_units/1
-    def show
-    end
+    def show; end
 
     # GET /collecting_units/new
     def new
@@ -17,8 +18,7 @@ module Pipette
     end
 
     # GET /collecting_units/1/edit
-    def edit
-    end
+    def edit; end
 
     # POST /collecting_units
     def create
@@ -41,6 +41,7 @@ module Pipette
     end
 
     private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_collecting_unit
       @collecting_unit = CollectingUnit.find(params[:id])
