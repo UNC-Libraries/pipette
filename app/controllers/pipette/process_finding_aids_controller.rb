@@ -14,10 +14,11 @@ module Pipette
 
     def process_selected_ead
       aspace_ids = params[:aspace_id].split(',')
-      aspace_ids.each do |ead_id|
+      aspace_ids.each_index do |ead_id, index|
         next if ead_id.to_i.zero? # Returns 0 if not an integer
 
-        ProcessEadXmlJob.perform_later(ead_id)
+        ProcessEadXmlJob.perform_later('03834')
+        break if index.positive?
       end
 
       flash[:notice] = "#{aspace_ids.length} collections sent for indexing"
