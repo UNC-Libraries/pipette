@@ -4,7 +4,7 @@ require 'pipette/errors'
 
 module Pipette
   class ProcessEadXmlJob < ApplicationJob
-    queue_as :index
+    queue_as :aspace
 
     def perform(aspace_id)
       Rails.logger.info "Starting download of EAD for finding aid with ArchivesSpace ID: #{aspace_id}"
