@@ -49,5 +49,8 @@
     <%= render 'modal' %>
   <% else %>
     <p>No collections have been synced from Archivesspace</p>
+    <%= form_with url: "/admin/process_all_finding_aids", method: :post do |form| %>
+      <%= form.submit "Index all collections", { id: 'all-resources', class: 'btn btn-danger' } %>
+    <% end %>
   <% end %>
 </div>
