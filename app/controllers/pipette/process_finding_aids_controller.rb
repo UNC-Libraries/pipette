@@ -3,10 +3,10 @@
 module Pipette
   class ProcessFindingAidsController < ApplicationController
     def process_all_ead
-      ead_ids = Pipette::AspaceClient.client.get('resources', { query: { all_ids: true } }).parsed
-      ead_ids.each do |ead_id|
-        ProcessEadXmlJob.perform_later(ead_id)
-      end
+      #ead_ids = Pipette::AspaceClient.client.get('resources', { query: { all_ids: true } }).parsed
+      #ead_ids.each do |ead_id|
+        ProcessEadXmlJob.perform_later('03834')
+      #end
 
       flash[:notice] = "All collections sent for indexing (#{ead_ids.length} collections)"
       redirect_to resources_path
