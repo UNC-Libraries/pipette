@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 require 'pipette/errors'
-require 'pipette'
 
 module Pipette
   class ProcessEadXmlJob < ApplicationJob
-    queue_as :aspace
+    queue_as :index
 
     def perform(aspace_id)
       Rails.logger.info "Starting download of EAD for finding aid with ArchivesSpace ID: #{aspace_id}"
