@@ -18,6 +18,8 @@ module Pipette
     private
 
     def format_error_msg(error_list)
+      return error_list unless error_list.is_a?(Array)
+
       message = ''
       error_list.each do |value|
         message += "#{value.join('; ')}\n"
