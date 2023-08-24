@@ -18,7 +18,7 @@ module Pipette
     private
 
     def format_error_msg(error_list)
-      return error_list unless error_list.is_a?(Array)
+      return error_list if error_list.is_a? String
 
       message = ''
       error_list.each do |value|
