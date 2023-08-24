@@ -1,10 +1,10 @@
 <p class="flash-success d-none"><%= notice %></p>
 
 <div id="resources">
+  <%=  render 'datatables' %>
   <h1 class="resource_list">Resources</h1>
 
   <% if @resources.length > 0 %>
-    <%=  render 'datatables' %>
     <%= render 'selection_btns' %>
     <table id="resource-list" class="table table-striped table-bordered">
       <thead class="table-light">
@@ -46,8 +46,11 @@
         </div>
       </div>
     </div>
-    <%= render 'modal' %>
   <% else %>
     <p>No collections have been synced from Archivesspace</p>
+    <%= form_with url: "/admin/process_all_finding_aids", method: :post do |form| %>
+      <%= form.submit "Index all collections", { id: 'all-resources', class: 'btn btn-danger' } %>
+    <% end %>
   <% end %>
+  <%= render 'modal' %>
 </div>
