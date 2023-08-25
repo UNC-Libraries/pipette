@@ -35,7 +35,8 @@ module Pipette
       repo.branch(branch_name).checkout
       repo.add(file_path)
       repo.commit("Adding/Updating EAD #{file_path}")
-      repo.push(repo.remote('origin'), branch_name)
+      # Only push to git from a server, not the VM. APP_NAME should always be an empty string on the VM
+      repo.push(repo.remote('origin'), branch_name) unless ENV['APP_NAME'].blank?
     end
   end
 end
