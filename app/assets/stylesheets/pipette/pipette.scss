@@ -1,5 +1,11 @@
 @import 'bootstrap';
 
+// UNC colors
+$unc-blue: #4b9cd3;
+$unc-blue-dark: #13294b;
+$white: white;
+$center: center;
+
 .flash-success {
   background-color: #d4edda;
   border-color: #c3e6cb;
@@ -27,11 +33,21 @@
   }
 }
 
-// Datatables CSS
+#job-status {
+  h1 {
+    margin: 25px auto;
+    text-align: center;
+  }
+}
+
+#job-status,
 #resource-list_wrapper {
   margin: auto;
   width: 96%;
+}
 
+// Datatables CSS
+#resource-list_wrapper {
   #resource-list_length,
   #resource-list_filter,
   #resource-list_filter {
@@ -57,6 +73,69 @@
   form {
     margin: auto 5px;
   }
+}
+
+/* Mostly the same as Archy CSS */
+.topbar {
+  background-color: $unc-blue !important;
+
+  a {
+    color: $white;
+    text-decoration: none;
+    padding: 0 5px;
+  }
+
+  .navbar-logo {
+    width: 320px;
+    height: 50px;
+    background-size: cover;
+    background-image: asset_url('libraries_logo_white.png');
+    margin-right: 0;
+    margin-top: 0;
+  }
+
+  @media (max-width: 575px) {
+    .navbar-logo {
+      width: 200px;
+      height: 30px;
+    }
+  }
+}
+
+footer {
+  width: 100%;
+  padding: 0;
+  background-color: #2f5272;
+  color: $white;
+  text-align: left;
+  max-width: none;
+  font-size: .92em;
+
+  .row {
+    --bs-gutter-x: 0;
+  }
+}
+
+.footer-links {
+  display: inline-flex;
+  justify-content: $center;
+  list-style-type: none;
+  width: 95%;
+  margin: auto;
+
+  li {
+    padding: 20px 10px;
+  }
+
+  a {
+    --bs-link-color: $white;
+    color: $white;
+    text-decoration: none;
+  }
+}
+
+.address {
+  text-align: $center;
 }
 
 @media (min-width: 576px) {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <title>Pipette</title>
   <%= csrf_meta_tags %>
@@ -8,8 +8,8 @@
   <%= stylesheet_link_tag    "pipette/application", media: "all" %>
 </head>
 <body>
-
+<%= render "layouts/pipette/header" %>
 <%= yield %>
-
+<%= render "layouts/pipette/footer" %>
 </body>
 </html>
