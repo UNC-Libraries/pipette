@@ -8,7 +8,12 @@ module Pipette
 
     def perform(aspace_id)
       Rails.logger.info "Starting download of EAD for finding aid with ArchivesSpace ID: #{aspace_id}"
-      Pipette::ProcessEad.new.process(aspace_id: aspace_id)
+      job = Pipette::ProcessEad.new.process(aspace_id: aspace_id)
+
+      # Store info about the job for display on job status board
+      store collecting_unit: job[:collecting_unit]
+      store collection_id: job[:collection_id]
+      store collection_title: job[:collection_title]
       Rails.logger.info "EAD written to file for finding aid with ArchivesSpace ID: #{aspace_id}"
     rescue Pipette::AspaceRequestError,
            Pipette::ClassificationError,
