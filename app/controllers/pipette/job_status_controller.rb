@@ -26,6 +26,33 @@ module Pipette
       @job_statuses.sort! { |y, x| (x['update_time'] <=> y['update_time']) || 1 }
     end
 
+    def status_data
+      jids = redis_adapter do |conn|
+        conn.scan(match: 'sidekiq:status:*', count: 100).map do |key|
+          key.split(':').last
+        end.uniq
+      end
+
+      @job_statuses = []
+
+      jids.each do |jid|
+        status = Sidekiq::Status::get_all jid
+        next if !status || status.count < 2
+
+        status['collection_title'] = field_value(status['collection_title'])
+        status['collection_id'] = field_value(status['collection_id'])
+        status['collecting unit'] = field_value(status['collecting_unit'])
+        status['worker'] = job_type(status['worker'])
+        @job_statuses << status
+      end
+
+      @job_statuses.sort! { |y, x| (x['update_time'] <=> y['update_time']) || 1 }
+
+      respond_to do |format|
+        format.json { render json: @job_statuses }
+      end
+    end
+
     def field_value(value)
       return '' if value.blank?
 

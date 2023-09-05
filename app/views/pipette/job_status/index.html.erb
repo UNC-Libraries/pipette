@@ -1,29 +1,52 @@
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
 <div id="job-status">
   <h1>Processing Pipeline Status Board</h1>
-  <% if @job_statuses.length > 0 %>
-    <table id="job-list" class="table table-striped table-bordered">
-      <thead class="table-light">
-      <tr>
-        <th scope="col">Action</th>
-        <th scope="col">Collection Id</th>
-        <th scope="col">Collection Name</th>
-        <th scope="col">Collecting Unit</th>
-        <th scope="col">Updated at</th>
-        <th scope="col">Status</th>
-      </tr>
-      </thead>
-      <tbody class="table-group-divider">
-      <% @job_statuses.each do |job_status| %>
-        <tr>
-          <td><%= job_status['worker'] %></td>
-          <td><%= job_status['collection_id'] %></td>
-          <td><%= job_status['collection_title'] %></td>
-          <td><%= job_status['collecting unit']  %></td>
-          <td><%= Time.at(job_status['update_time'].to_i).strftime("%Y-%m-%d %H:%M:%S") %></td>
-          <td><%= job_status['status'] %></td>
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
-  <% end %>
+  <table id="job-list" class="table table-striped table-bordered">
+    <thead class="table-light">
+    <tr>
+      <th scope="col">Action</th>
+      <th scope="col">Collection Id</th>
+      <th scope="col">Collection Name</th>
+      <th scope="col">Collecting Unit</th>
+      <th scope="col">Updated at</th>
+      <th scope="col">Status</th>
+    </tr>
+    </thead>
+    <tbody id="job-results"></tbody>
+  </table>
 </div>
+
+<script type="module">
+    import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js'
+
+    createApp({
+        data() {
+            return {
+                job_statuses: []
+            }
+        },
+
+        template: `<tr v-for="job_status in job_statuses">
+            <td>{{ job_status.worker }}</td>
+            <td>{{ job_status.collection_id }}</td>
+            <td>{{ job_status.collection_title }}</td>
+            <td>{{ job_status.collecting_unit }}</td>
+            <td>{{ job_status.update_time }}</td>
+            <td>{{ job_status.status }}</td>
+        </tr>`,
+
+        methods: {
+            async getStatusUpdate() {
+                const response = await fetch('/admin/job_status_data')
+                this.job_statuses = await response.json();
+            }
+        },
+
+        mounted() {
+            this.getStatusUpdate()
+            setInterval(this.getStatusUpdate, 10000);
+        }
+    }).mount('#job-results')
+</script>
