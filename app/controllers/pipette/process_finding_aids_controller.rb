@@ -20,7 +20,8 @@ module Pipette
         ProcessEadXmlJob.perform_later(ead_id)
       end
 
-      flash[:notice] = "#{aspace_ids.length} collections sent for indexing"
+      num_of_collections = aspace_ids.length
+      flash[:notice] = "#{num_of_collections} #{'collection'.pluralize(num_of_collections)} sent for indexing"
       redirect_to resources_path
     end
   end

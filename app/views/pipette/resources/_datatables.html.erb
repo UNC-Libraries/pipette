@@ -98,8 +98,10 @@
 
         showFlashMsg() {
             const msg = $('.flash-success');
-            msg.removeClass('d-none');
-            setTimeout(() => msg.addClass('d-none'), 5000);
+            if (msg.text() !== '') {
+                msg.removeClass('d-none');
+                setTimeout(() => msg.addClass('d-none'), 5000);
+            }
         }
 
         // Private methods
