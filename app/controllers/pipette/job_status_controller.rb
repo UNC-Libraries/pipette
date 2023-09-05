@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
+# Heavily borrowed from https://github.com/kenaniah/sidekiq-status/blob/v3.0.3/lib/sidekiq-status.rb
 module Pipette
   class JobStatusController < ApplicationController
     def index
-      statuses = connection.scan(0, match: 'sidekiq:status:*', count: 100)
-      jids = statuses.last.map { |b| b.to_s.split(':').last }
+      jids = redis_adapter do |conn|
+        conn.scan(match: 'sidekiq:status:*', count: 100).map do |key|
+          key.split(':').last
+        end.uniq
+      end
 
       @job_statuses = []
 
@@ -22,10 +26,6 @@ module Pipette
       @job_statuses.sort! { |y, x| (x['update_time'] <=> y['update_time']) || 1 }
     end
 
-    def connection
-      Sidekiq.redis { |c| c }
-    end
-
     def field_value(value)
       return '' if value.blank?
 
@@ -39,6 +39,16 @@ module Pipette
       return 'Collection deleted' if job_type.include? 'DeleteFindingAidJob'
 
       'Unknown action'
+    end
+
+    # Methods pulled from sidekiq-status
+    # https://github.com/kenaniah/sidekiq-status/blob/v3.0.3/lib/sidekiq-status.rb
+    def wrap_redis_connection(conn)
+      conn.is_a?(Pipette::RedisAdapter) ? conn : Pipette::RedisAdapter.new(conn)
+    end
+
+    def redis_adapter
+      Sidekiq.redis { |conn| yield wrap_redis_connection(conn) }
     end
   end
 end
