@@ -35,7 +35,12 @@ $center: center;
 
 #job-status {
   h1 {
-    margin: 25px auto;
+    margin: 25px auto 5px auto;
+    text-align: center;
+  }
+  h2 {
+    font-size: 1rem;
+    font-weight: normal;
     text-align: center;
   }
 }
