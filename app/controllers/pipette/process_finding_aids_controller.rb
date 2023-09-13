@@ -9,7 +9,7 @@ module Pipette
       end
 
       flash[:notice] = "All collections sent for indexing (#{ead_ids.length} collections)"
-      redirect_to resources_path
+      redirect_to job_status_index_path
     end
 
     def process_selected_ead
@@ -22,7 +22,7 @@ module Pipette
 
       num_of_collections = aspace_ids.length
       flash[:notice] = "#{num_of_collections} #{'collection'.pluralize(num_of_collections)} sent for indexing"
-      redirect_to resources_path
+      redirect_to job_status_index_path
     end
   end
 end

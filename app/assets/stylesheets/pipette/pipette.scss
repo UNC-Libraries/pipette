@@ -80,6 +80,10 @@ $center: center;
   }
 }
 
+td.job-status {
+  text-transform: capitalize;
+}
+
 /* Mostly the same as Archy CSS */
 .topbar {
   background-color: $unc-blue !important;
