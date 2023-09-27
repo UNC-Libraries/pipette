@@ -4,7 +4,7 @@ module Pipette
   class ProcessEad
     include DownloadEad
 
-    def process(aspace_id:)
+    def process(aspace_id:, is_deletion:)
       resource_record = get_resource_info(resource_id: aspace_id)
       AspaceErrors.new.errors_check(resource_record: resource_record, aspace_id: aspace_id)
 
@@ -18,11 +18,17 @@ module Pipette
       resource_record['classifications'].each do |classification|
         classification_uri = classification['ref'].to_s
         collection = collecting_unit_identifier(classification_uri: classification_uri)
-        ead_xml = get_xml(aspace_id: aspace_id)
-        write_xml(resource_record['ead_id'], collection, ead_xml)
+
+        if is_deletion
+          delete_xml(resource_record['ead_id'], collection)
+        else
+          ead_xml = get_xml(aspace_id: aspace_id)
+          write_xml(resource_record['ead_id'], collection, ead_xml)
+        end
 
         collecting_unit = collecting_unit_info(classification_uri: classification_uri)
-        resource.update_database(collecting_unit.id, resource_record)
+        resource.update_database(collecting_unit.id, resource_record, is_deletion)
+
         collecting_units << collecting_unit.collecting_unit.upcase
       end
 

@@ -21,12 +21,25 @@ module Pipette
     end
 
     def write_xml(ead_id, collecting_unit, resource_xml)
-      file_path = "#{ENV['FINDING_AID_DATA']}/#{collecting_unit}/#{ead_id}.xml"
+      collecting_unit_path = collecting_unit_dir_path(collecting_unit)
+      file_path = "#{collecting_unit_path}/#{ead_id}.xml"
 
-      FileUtils.mkdir_p "#{ENV['FINDING_AID_DATA']}/#{collecting_unit}"
+      FileUtils.mkdir_p collecting_unit_path
       File.write(file_path, resource_xml)
 
       commit_to_git(file_path)
+    end
+
+    def delete_xml(ead_id, collecting_unit)
+      file_path = "#{collecting_unit_dir_path(collecting_unit)}/#{ead_id}.xml"
+      FileUtils.remove_file(file_path)
+      delete_pdf(ead_id, collecting_unit)
+      commit_to_git(file_path)
+    end
+
+    def delete_pdf(ead_id, collecting_unit)
+      file_path = "#{ENV['FINDING_AID_PDF_PATH']}/#{collecting_unit}/#{ead_id}.pdf"
+      FileUtils.remove_file(file_path)
     end
 
     def commit_to_git(file_path)
@@ -37,6 +50,10 @@ module Pipette
       repo.commit("Adding/Updating EAD #{file_path}")
       # Only push to git from a server, not the VM. APP_NAME should always be an empty string on the VM
       repo.push(repo.remote('origin'), branch_name) unless ENV['APP_NAME'].blank?
+    end
+
+    def collecting_unit_dir_path(collecting_unit)
+      "#{ENV['FINDING_AID_DATA']}/#{collecting_unit}"
     end
   end
 end

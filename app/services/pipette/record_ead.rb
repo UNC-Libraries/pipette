@@ -2,9 +2,11 @@
 
 module Pipette
   class RecordEad
-    def update_database(collecting_unit, resource)
+    def update_database(collecting_unit, resource, is_deletion)
       pipette_record = Resource.find_by(pipette_collecting_unit_id: collecting_unit, resource_identifier: resource['ead_id'])
-      if pipette_record.nil?
+      if is_deletion
+        delete_resource_record(pipette_record)
+      elsif pipette_record.nil?
         create_resource_record(collecting_unit, resource)
       else
         edit_resource_record(pipette_record, collecting_unit, resource)
@@ -27,6 +29,10 @@ module Pipette
                                          resource_identifier: resource['ead_id'],
                                          last_updated_on_aspace: format_aspace_date(resource['system_mtime']),
                                          last_indexed_on: date_indexed)
+    end
+
+    def delete_resource_record(pipette_record)
+      Resource.destroy(pipette_record.id)
     end
 
     private

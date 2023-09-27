@@ -8,7 +8,7 @@ module Pipette
 
     def perform(aspace_id)
       Rails.logger.info "Starting download of EAD for finding aid with ArchivesSpace ID: #{aspace_id}"
-      job = Pipette::ProcessEad.new.process(aspace_id: aspace_id)
+      job = Pipette::ProcessEad.new.process(aspace_id: aspace_id, is_deletion: false)
 
       # Store info about the job for display on job status board
       store collecting_unit: job[:collecting_unit]

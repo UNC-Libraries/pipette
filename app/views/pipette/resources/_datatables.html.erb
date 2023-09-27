@@ -129,8 +129,8 @@
     $(function() {
         const resources_table = $('#resource-list').DataTable({
             columnDefs: [
-                { orderable: false, targets: 0 },
-                { searchable: false, targets: [0, 4, 5] }
+                { orderable: false, targets: [0, 6] },
+                { searchable: false, targets: [0, 4, 5, 6] }
             ],
             pageLength: 10,
             order: [[5, 'desc'], [3, 'asc']] //indexed on arclight, then by collection name

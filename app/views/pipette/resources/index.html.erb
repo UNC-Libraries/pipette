@@ -15,6 +15,7 @@
         <th scope="col">Collection Name</th>
         <th scope="col">Last Updated on Aspace</th>
         <th scope="col">Last Indexed on Archy</th>
+        <th scope="col"><span class="visually-hidden">Delete Collection from Index</span></th>
       </tr>
       </thead>
       <tbody class="table-group-divider">
@@ -28,6 +29,12 @@
           <td class="text-start"><%= resource.resource_name %></td>
           <td class="text-start"><%= resource.last_updated_on_aspace.strftime("%Y-%m-%d %H:%M:%S") %></td>
           <td class="text-start"><%= resource.last_indexed_on.strftime("%Y-%m-%d %H:%M:%S") %></td>
+          <td>
+            <%= form_with url: "/admin/delete_finding_aid", method: :post do |form| %>
+              <%= form.hidden_field :delete_aspace_id, id: "ead_deletion_#{resource.aspace_id }", value: resource.aspace_id %>
+              <%= form.submit "Delete", { id: 'all-resources', class: 'btn btn-danger' } %>
+            <% end %>
+          </td>
         </tr>
       <% end %>
       </tbody>

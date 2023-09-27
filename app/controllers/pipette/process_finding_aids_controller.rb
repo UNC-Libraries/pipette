@@ -24,5 +24,15 @@ module Pipette
       flash[:notice] = "#{num_of_collections} #{'collection'.pluralize(num_of_collections)} sent for indexing"
       redirect_to job_status_index_path
     end
+
+    def delete_ead
+      aspace_id = params[:delete_aspace_id]
+      return if aspace_id.to_i.zero? # Returns 0 if not an integer
+
+      DeleteEadXmlJob.perform_later(aspace_id)
+
+      flash[:notice] = "#{aspace_id} deleted from ArCHy"
+      redirect_to job_status_index_path
+    end
   end
 end

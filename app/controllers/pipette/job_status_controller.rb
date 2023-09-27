@@ -63,7 +63,7 @@ module Pipette
       return 'XML downloaded' if job_type.include? 'ProcessEadXmlJob'
       return 'Collection indexed' if job_type.include? 'IndexFindingAidJob'
       return 'PDF generated' if job_type.include? 'PdfGenerationJob'
-      return 'Collection deleted' if job_type.include? 'DeleteFindingAidJob'
+      return 'Collection deleted' if job_type.include? 'DeleteEadXmlJob'
 
       'Unknown action'
     end
