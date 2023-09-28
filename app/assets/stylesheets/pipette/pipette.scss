@@ -60,6 +60,12 @@ $center: center;
   }
 }
 
+#resource-list {
+  .btn-danger {
+    font-size: .75rem;
+  }
+}
+
 .resource-update {
   margin: 25px auto 50px auto;
   text-align: left;
