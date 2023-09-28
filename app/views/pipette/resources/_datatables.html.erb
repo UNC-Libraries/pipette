@@ -104,6 +104,19 @@
             }
         }
 
+        deleteItem() {
+            $('#resource-list').on('click', function(e) {
+               const ead_id = e.target.id;
+                if (e.target.id.startsWith('ead_deletion_btn')) {
+                    const ead_collection = ead_id.split('_');
+                    const msg = `Are you sure you want to delete collection: "${ead_collection[ead_collection.length - 1]}". This action cannot be undone`;
+                    return window.confirm(msg);
+                }
+
+                return true;
+            });
+        }
+
         // Private methods
         #setStorage() {
             sessionStorage.setItem('resourcesToIndex', JSON.stringify(this.selected_resources));
@@ -143,6 +156,7 @@
         resource_processing.selectAll();
         resource_processing.clearSelectAll(resources_table);
         resource_processing.clearSelectedOnSubmit();
+        resource_processing.deleteItem();
         resource_processing.showFlashMsg();
 
         // Set modal display of selected resources
