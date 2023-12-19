@@ -4,10 +4,10 @@ require 'archivesspace/client'
 
 module Pipette
   module AspaceClient
-    def self.client(use_default_repo: true)
-      client = ArchivesSpace::Client.new(client_config).login
-      client.repository(2) if use_default_repo
-      client
+    def self.client
+      aspace = ArchivesSpace::Client.new(client_config).login
+      aspace.repository(2)
+      aspace
     end
 
     def self.client_config

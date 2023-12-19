@@ -34,4 +34,10 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rails', '>= 7.0.6'
   spec.add_dependency 'sidekiq', '~> 5.2.10'
   spec.add_dependency 'sidekiq-status', '~> 2.1.3'
+
+  spec.add_development_dependency 'capybara'
+  spec.add_development_dependency 'rspec-rails', '~> 6.0'
+  spec.add_development_dependency 'selenium-webdriver'
+  spec.add_development_dependency 'webdrivers'
+  spec.add_development_dependency 'webmock', '~> 3.18'
 end

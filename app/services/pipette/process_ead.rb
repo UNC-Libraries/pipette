@@ -41,8 +41,9 @@ module Pipette
     end
 
     def collecting_unit_identifier(classification_uri:)
-      collecting_unit = Pipette::AspaceClient.client(use_default_repo: false).get(classification_uri).parsed
-      collecting_unit['slug']
+      repo = classification_uri.split('/')
+      collecting_unit = Pipette::AspaceClient.client.get("/classifications/#{repo.last}")
+      JSON.parse(collecting_unit)['slug']
     end
 
     def collecting_unit_list(collections)

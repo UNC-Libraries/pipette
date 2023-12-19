@@ -9,7 +9,7 @@ module Pipette
     def perform(aspace_id)
       Rails.logger.info "Starting deletion of EAD for finding aid with ArchivesSpace ID: #{aspace_id}"
       job = Pipette::ProcessEad.new.process(aspace_id: aspace_id, is_deletion: true)
-      Rails.logger.warn("Cans: #{job}")
+
       # Store info about the job for display on job status board
       store collecting_unit: job[:collecting_unit]
       store collection_id: job[:collection_id]

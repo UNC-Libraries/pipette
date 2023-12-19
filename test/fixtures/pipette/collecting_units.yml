@@ -1,7 +1,9 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  collecting_unit: MyString
+  id: 1
+  collecting_unit: shc
 
 two:
-  collecting_unit: MyString
+  id: 2
+  collecting_unit: sfc
