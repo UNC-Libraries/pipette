@@ -5,8 +5,7 @@ require 'git'
 module Pipette
   module DownloadEad
     def get_resource_info(resource_id:)
-      data = Pipette::AspaceClient.client.get("resources/#{resource_id}")
-      JSON.parse(data)
+      Pipette::AspaceClient.client.get("resources/#{resource_id}").parsed
     end
 
     def get_xml(aspace_id:)
@@ -18,8 +17,8 @@ module Pipette
         ead3: false,
         print_pdf: false
       }
-      p = Pipette::AspaceClient.client.get("resource_descriptions/#{aspace_id}.xml", query: query_params, timeout: 1200)
-      p.body.force_encoding('UTF-8')
+      Pipette::AspaceClient.client.get("resource_descriptions/#{aspace_id}.xml", query: query_params, timeout: 1200)
+                           .body.force_encoding('UTF-8')
     end
 
     def write_xml(ead_id, collecting_unit, resource_xml)
@@ -52,7 +51,7 @@ module Pipette
       branch_name = ENV['FINDING_AID_BRANCH'].to_s
       repo = Git.open(ENV['FINDING_AID_DATA'].to_s, log: Rails.logger)
       repo.branch(branch_name).checkout
-      repo.fetch(repo.remote('origin'), branch_name) # Pull in any upstream changes first
+      # repo.fetch(repo.remote('origin'), branch_name) # Pull in any upstream changes first
       repo.add(file_path)
       repo.commit("Adding/Updating EAD #{file_path}")
       # Only push to git from a server, not the VM. APP_NAME should always be an empty string on the VM

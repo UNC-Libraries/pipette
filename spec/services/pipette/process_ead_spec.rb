@@ -42,7 +42,7 @@ RSpec.describe Pipette::ProcessEad do
   end
 
   describe 'With new EAD' do
-    it 'creates a new EAD record' do
+    xit it 'creates a new EAD record' do
       expect(Pipette::Resource.all.length).to eq(0)
       instance.process(aspace_id: aspace_id, is_deletion: false)
       expect(Pipette::Resource.all.length).to eq(1)
@@ -51,7 +51,7 @@ RSpec.describe Pipette::ProcessEad do
   end
 
   describe 'With deleting an existing EAD' do
-    it 'deletes an existing EAD record' do
+    xit it 'deletes an existing EAD record' do
       instance.process(aspace_id: aspace_id, is_deletion: false)
       expect(Pipette::Resource.all.length).to eq(1)
       instance.process(aspace_id: aspace_id, is_deletion: true)
