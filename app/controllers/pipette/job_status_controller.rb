@@ -60,6 +60,7 @@ module Pipette
     end
 
     def job_type(job_type)
+      return 'Unknown action' if job_type.nil?
       return 'XML downloaded' if job_type.include? 'ProcessEadXmlJob'
       return 'Collection indexed' if job_type.include? 'IndexFindingAidJob'
       return 'PDF generated' if job_type.include? 'PdfGenerationJob'
