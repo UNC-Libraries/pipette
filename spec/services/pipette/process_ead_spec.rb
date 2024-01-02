@@ -15,34 +15,32 @@ RSpec.describe Pipette::ProcessEad do
       'ead_id' => 123,
       'system_mtime' => '2022-07-19T14:17:11Z',
       'uri' => '/aspace/123',
-      'slug' => ''
+      'slug' => 'shc'
     }
   end
-
-  let(:resource_info) { instance_double Pipette::DownloadEad }
-  let(:aspace_errors) { double Pipette::AspaceErrors }
 
   before do
     Rails.application.load_seed
     # No response errors
-    allow(aspace_errors).to receive(:errors_check).and_return(nil)
-    # Get the resource
-    allow(Pipette::AspaceClient).to receive_message_chain(:client, :get)
-      .with("resources/#{aspace_id}").and_return(resource_record.to_json)
+    allow(Pipette::AspaceErrors).to receive_message_chain(:new, :errors_check).with(resource_record: anything, aspace_id: 123).and_return(nil)
     # Get the classification slug of the resource
-    allow(Pipette::AspaceClient).to receive_message_chain(:client, :get)
-      .with('/classifications/1').and_return({ slug: 'shc' }.to_json)
+    allow(Pipette::AspaceClient).to receive_message_chain(:client, :get, :parsed)
+      .with('/classifications/1').with(no_args).and_return({ slug: 'shc' })
+    # Get the resource
+    allow(Pipette::AspaceClient).to receive_message_chain(:client, :get, :parsed)
+                                      .with("resources/#{aspace_id}").with(no_args).and_return(resource_record)
     # Get resource XML
-    allow(Pipette::AspaceClient).to receive_message_chain(:client, :get)
-      .with("resource_descriptions/#{aspace_id}.xml",
-            { query: { ead3: false, include_daos: true,
+    allow(Pipette::AspaceClient).to receive_message_chain(:client, :get, :body)
+      .with("resource_descriptions/#{aspace_id}.xml")
+      .with({ query: { ead3: false, include_daos: true,
                        include_unpublished: false, numbered_cs: true,
                        print_pdf: false, repo_id: 2 }, timeout: 1200 })
-      .and_return(instance_double(HTTParty::Response, body: ead))
+      .with(no_args)
+      .and_return(ead)
   end
 
   describe 'With new EAD' do
-    xit it 'creates a new EAD record' do
+    it 'creates a new EAD record' do
       expect(Pipette::Resource.all.length).to eq(0)
       instance.process(aspace_id: aspace_id, is_deletion: false)
       expect(Pipette::Resource.all.length).to eq(1)
@@ -51,7 +49,7 @@ RSpec.describe Pipette::ProcessEad do
   end
 
   describe 'With deleting an existing EAD' do
-    xit it 'deletes an existing EAD record' do
+    it 'deletes an existing EAD record' do
       instance.process(aspace_id: aspace_id, is_deletion: false)
       expect(Pipette::Resource.all.length).to eq(1)
       instance.process(aspace_id: aspace_id, is_deletion: true)
