@@ -21,11 +21,6 @@ $center: center;
   right: 15px;
 }
 
-#collecting-units,
-#resources {
-  text-align: center;
-}
-
 #collecting-units {
   table {
     margin: 25px auto auto auto;
@@ -64,6 +59,11 @@ $center: center;
   .btn-danger {
     font-size: .75rem;
   }
+}
+
+#resources-index {
+  margin: 25px auto;
+  width: 80%;
 }
 
 .resource-update {
@@ -147,10 +147,6 @@ footer {
     color: $white;
     text-decoration: none;
   }
-}
-
-.address {
-  text-align: $center;
 }
 
 @media (min-width: 576px) {

@@ -15,7 +15,7 @@ module Pipette
     def process_selected_ead
       aspace_ids = params[:aspace_id].split(',')
       aspace_ids.each do |ead_id|
-        next if ead_id.to_i.zero? # Returns 0 if not an integer
+        next if ead_id.strip.to_i.zero? # Returns 0 if not an integer
 
         ProcessEadXmlJob.perform_later(ead_id)
       end

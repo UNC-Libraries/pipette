@@ -5,6 +5,8 @@ module Pipette
       @resources = Resource.all
     end
 
+    def new; end
+
     def update_all_resources(only_since_last_update: true)
       resource_ids = Pipette::AspaceClient.client.get('resources', { query: { all_ids: true } }).parsed
       resource_ids.each do |resource_id|
