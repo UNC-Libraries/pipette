@@ -64,7 +64,7 @@
                 });*/
 
                 // This selects visible rows
-                $('input[type=checkbox]').each(function() {
+                $('#resource-list input[type=checkbox]').each(function() {
                     const _this = $(this);
                     _this.prop('checked', true);
                     const resource = _this.attr('id');
@@ -79,6 +79,13 @@
         submitAllCheck() {
             $('#all-resources').on('click', () => {
                 return window.confirm("Processing all Aspace resources can take 2+ hours. Are you sure you'd like to proceed?");
+            });
+        }
+
+        forceIndexing() {
+            $('#force_indexing').on('click', function() {
+                let should_force = ($(this).is(':checked')) ? 'true' : 'false';
+                $('.should-force-indexing').val(should_force);
             });
         }
 
@@ -153,6 +160,7 @@
         // Set list of selected resources
         resource_processing.selectedResourcesEventHandler(resources_table);
         // Setup various event listeners
+        resource_processing.forceIndexing();
         resource_processing.selectAll();
         resource_processing.clearSelectAll(resources_table);
         resource_processing.clearSelectedOnSubmit();

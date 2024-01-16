@@ -13,6 +13,7 @@
       <th scope="col">Collecting Unit</th>
       <th scope="col">Updated at</th>
       <th scope="col">Status</th>
+      <th scope="col">Note</th>
     </tr>
     </thead>
     <tbody id="job-results"></tbody>
@@ -37,6 +38,7 @@
             <td>{{ job_status.collecting_unit }}</td>
             <td>{{ formatDate(job_status.update_time) }}</td>
             <td class="job-status">{{ job_status.status }}</td>
+            <td>{{ job_status.note }}</td>
         </tr>
         <teleport to="#refresh">{{ last_refresh }}</teleport>`,
 
@@ -54,7 +56,7 @@
         },
 
         mounted() {
-            this.getStatusUpdate()
+            this.getStatusUpdate();
             setInterval(this.getStatusUpdate, 10000);
         }
     }).mount('#job-results')
