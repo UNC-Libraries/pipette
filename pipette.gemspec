@@ -31,8 +31,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'omniauth', '~> 2.0'
   spec.add_dependency 'omniauth-rails_csrf_protection'
   spec.add_dependency 'omniauth-shibboleth', '~> 1.3'
-  spec.add_dependency 'rails', '>= 7.0.6'
-  spec.add_dependency 'sidekiq', '~> 5.2.10'
+  spec.add_dependency 'rails', '~> 7.0.6'
+  spec.add_dependency 'sidekiq', '~> 6.5.12'
   spec.add_dependency 'sidekiq-status', '~> 2.1.3'
 
   spec.add_development_dependency 'capybara'
