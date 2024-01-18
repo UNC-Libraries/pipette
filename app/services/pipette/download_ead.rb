@@ -22,8 +22,6 @@ module Pipette
     end
 
     def write_xml(ead_id, collecting_unit, resource_xml)
-      return if Rails.env.test?
-
       collecting_unit_path = collecting_unit_dir_path(collecting_unit)
       file_path = "#{collecting_unit_path}/#{ead_id}.xml"
 
@@ -34,20 +32,26 @@ module Pipette
     end
 
     def delete_xml(ead_id, collecting_unit)
-      return if Rails.env.test?
-
       file_path = "#{collecting_unit_dir_path(collecting_unit)}/#{ead_id}.xml"
       FileUtils.remove_file(file_path)
       delete_pdf(ead_id, collecting_unit)
       commit_to_git(file_path)
     end
 
+    private
+
+    # This seems to cause the download_ead tests to fail if there's no rescue block
+    # as it's trying to find a non-existent temp file. Not sure what's going on there
     def delete_pdf(ead_id, collecting_unit)
       file_path = "#{ENV['FINDING_AID_PDF_PATH']}/#{collecting_unit}/#{ead_id}.pdf"
       FileUtils.remove_file(file_path)
+    rescue Errno::ENOENT
+      Rails.logger.warn "PDF deletion error: Unable to delete #{file_path}. The file does not exist"
     end
 
     def commit_to_git(file_path)
+      return if Rails.env.test?
+
       branch_name = ENV['FINDING_AID_BRANCH'].to_s
       repo = Git.open(ENV['FINDING_AID_DATA'].to_s, log: Rails.logger)
       repo.branch(branch_name).checkout
