@@ -3,9 +3,10 @@
 module Pipette
   class ProcessFindingAidsController < ApplicationController
     def process_all_ead
+      force = params[:force] || false
       ead_ids = Pipette::AspaceClient.client.get('resources', { query: { all_ids: true } }).parsed
       ead_ids.each do |ead_id|
-        ProcessEadXmlJob.perform_later(ead_id)
+        ProcessEadXmlJob.perform_later(ead_id, force)
       end
 
       flash[:notice] = "All collections sent for indexing (#{ead_ids.length} collections)"
@@ -14,10 +15,11 @@ module Pipette
 
     def process_selected_ead
       aspace_ids = params[:aspace_id].split(',')
+      force = params[:force] || false
       aspace_ids.each do |ead_id|
         next if ead_id.strip.to_i.zero? # Returns 0 if not an integer
 
-        ProcessEadXmlJob.perform_later(ead_id)
+        ProcessEadXmlJob.perform_later(ead_id, force)
       end
 
       num_of_collections = aspace_ids.length

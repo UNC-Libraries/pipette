@@ -6,14 +6,15 @@ module Pipette
   class ProcessEadXmlJob < ApplicationJob
     queue_as :aspace
 
-    def perform(aspace_id)
+    def perform(aspace_id, force)
       Rails.logger.info "Starting download of EAD for finding aid with ArchivesSpace ID: #{aspace_id}"
-      job = Pipette::ProcessEad.new.process(aspace_id: aspace_id, is_deletion: false)
+      job = Pipette::ProcessEad.new.process(aspace_id: aspace_id, is_deletion: false, force: force)
 
       # Store info about the job for display on job status board
       store collecting_unit: job[:collecting_unit]
       store collection_id: job[:collection_id]
       store collection_title: job[:collection_title]
+      store note: job[:note]
       Rails.logger.info "EAD written to file for finding aid with ArchivesSpace ID: #{aspace_id}"
     rescue Pipette::AspaceRequestError,
            Pipette::ClassificationError,
