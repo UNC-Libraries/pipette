@@ -112,15 +112,13 @@
         }
 
         deleteItem() {
-            $('#resource-list').on('click', function(e) {
-               const ead_id = e.target.id;
-                if (e.target.id.startsWith('ead_deletion_btn')) {
-                    const ead_collection = ead_id.split('_');
-                    const msg = `Are you sure you want to delete collection: "${ead_collection[ead_collection.length - 1]}". This action cannot be undone`;
-                    return window.confirm(msg);
-                }
-
-                return true;
+            let soft_deletion_modal = $('#deletionModal');
+            soft_deletion_modal.on('show.bs.modal', function(event) {
+                let button = event.relatedTarget;
+                let item_to_delete = button.getAttribute('data-bs-deletion-id');
+                $('#deletionModal .modal-title').text(`Deletion request for EAD ${item_to_delete}`);
+                $('#full_delete').prop('checked', true);
+                $('#delete_aspace_id').val(item_to_delete);
             });
         }
 

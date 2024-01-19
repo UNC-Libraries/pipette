@@ -86,12 +86,18 @@ $center: center;
   }
 }
 
-.force-btn {
-  margin: 15px auto auto auto;
-  width: 50%;
+#deletionModal {
+  .modal-content {
+    margin: auto;
+    width: 50%;
 
-  .form-switch {
-    margin-left: 10px;
+    .modal-body {
+      text-align: left;
+
+      .intro {
+        margin-bottom: 2rem;
+      }
+    }
   }
 }
 

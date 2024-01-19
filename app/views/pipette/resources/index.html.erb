@@ -30,10 +30,9 @@
           <td class="text-start"><%= resource.last_updated_on_aspace.strftime("%Y-%m-%d %H:%M:%S") %></td>
           <td class="text-start"><%= resource.last_indexed_on.strftime("%Y-%m-%d %H:%M:%S") %></td>
           <td>
-            <%= form_with url: "/admin/delete_finding_aid", method: :post do |form| %>
-              <%= form.hidden_field :delete_aspace_id, id: "ead_deletion_#{resource.aspace_id }", value: resource.aspace_id %>
-              <%= form.submit "Delete", { id: "ead_deletion_btn_#{resource.resource_identifier }", class: 'btn btn-danger' } %>
-            <% end %>
+            <button class="btn btn-danger" data-bs-target="#deletionModal" data-bs-toggle="modal"
+                    data-bs-deletion-id="<%= resource.resource_identifier %>">Delete</button>
+
           </td>
         </tr>
       <% end %>
@@ -62,5 +61,6 @@
       <%= form.submit "Index all collections", { id: 'all-resources', class: 'btn btn-danger' } %>
     <% end %>
   <% end %>
-  <%= render 'modal' %>
+  <%= render 'selected_for_indexing_modal' %>
+  <%= render 'soft_delete_modal' %>
 </div>

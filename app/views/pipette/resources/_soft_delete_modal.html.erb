@@ -1,0 +1,34 @@
+<div class="modal fade" id="deletionModal" tabindex="-1" aria-labelledby="deletionModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deletionModalLabel">Delete EAD</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <%= form_with url: "/admin/delete_finding_aidz", method: :post do |form| %>
+        <div class="modal-body">
+          <div class="form-check">
+            <%= form.radio_button :deletion_type, 'full', id: 'full_delete', class: 'form-check-input', checked: true, 'aria-describedby': 'full_delete_block' %>
+            <%= form.label :full_delete, "Full Deletion", class: "form-check-label" %>
+          </div>
+          <p id="full_delete_block" class="form-text">
+            Remove the item from Pipette and Archy, delete the EAD and any generated files such as the PDF output of the EAD.
+          </p>
+          <div class="form-check">
+            <%= form.radio_button :deletion_type, 'soft', id: 'soft_delete', class: 'form-check-input', 'aria-describedby': 'soft_delete_block' %>
+            <%= form.label :soft_delete, "Soft Deletion", class: "form-check-label" %>
+          </div>
+          <p id="soft_delete_block" class="form-text">
+            Delete the item from Archy without deleting the item from Pipette or the accompanying EAD XML file,
+            such as for a temporary takedown.
+          </p>
+          <%= form.hidden_field :delete_aspace_id, id: "delete_aspace_id", value: '' %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <%= form.submit "Send for Deletion", { class: 'btn btn-danger' } %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
