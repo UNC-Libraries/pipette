@@ -28,6 +28,14 @@ $center: center;
   }
 }
 
+#fullIndexingModal {
+  text-align: left;
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+}
+
 #job-status {
   h1 {
     margin: 25px auto 5px auto;

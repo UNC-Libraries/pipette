@@ -6,6 +6,16 @@
   <%= csp_meta_tag %>
 
   <%= stylesheet_link_tag    "pipette/application", media: "all" %>
+  <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" crossorigin="anonymous"></script>
+  <script>
+      $(function() {
+          const msg = $('.flash-success');
+          if (msg.text() !== '') {
+              msg.removeClass('d-none');
+              setTimeout(() => msg.addClass('d-none'), 7000);
+          }
+      });
+  </script>
 </head>
 <body>
 <%= render "layouts/pipette/header" %>
