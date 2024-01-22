@@ -17,7 +17,7 @@ module Pipette
       flash_text = if params[:index_since] == 'all'
                      "All collections sent for indexing (#{ead_ids.length} collections)"
                    else
-                     "#{ead_ids.length} sent for indexing"
+                     "#{ead_ids.length} collections sent for indexing"
                    end
 
       redirect_to job_status_index_path, notice: flash_text
