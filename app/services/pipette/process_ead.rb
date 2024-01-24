@@ -2,6 +2,7 @@
 
 module Pipette
   class ProcessEad
+    include ApplicationHelper
     include DownloadEad
 
     def process(aspace_id:, is_deletion:, force:)
@@ -24,7 +25,8 @@ module Pipette
           pipette_collecting_unit_id: collecting_unit.id,
           resource_identifier: resource_record['ead_id']
         )
-        should_index = is_deletion || should_force?(force) || needs_indexing?(pipette_record, resource_record)
+        should_index = is_deletion || should_force?(force) ||
+                       needs_indexing?(pipette_record&.last_indexed_on, resource_record['user_mtime'])
 
         if should_index
           if is_deletion
@@ -45,13 +47,6 @@ module Pipette
       record_for_status_info[:collecting_unit] = collecting_unit_list(collecting_units)
       record_for_status_info[:note] = notes.join('<br/>')
       record_for_status_info
-    end
-
-    # Convert dates to timestamps and compare
-    def needs_indexing?(pipette_record, resource_record)
-      return true if pipette_record.nil?
-
-      pipette_record.last_indexed_on.to_datetime.to_i < resource_record['user_mtime'].to_datetime.to_i
     end
 
     # "force" should come in as a string since it's from a form

@@ -6,6 +6,10 @@
 
   <% if @resources.length > 0 %>
     <%= render 'selection_btns' %>
+    <div class="indexing-note">
+      <div></div>
+      <p>Indicates a record that needs updating on Archy</p>
+    </div>
     <table id="resource-list" class="table table-striped table-bordered">
       <thead class="table-light">
       <tr>
@@ -20,7 +24,7 @@
       </thead>
       <tbody class="table-group-divider">
       <% @resources.each do |resource| %>
-        <tr>
+        <tr class="<%= 'table-danger' if needs_indexing?(resource.last_indexed_on, resource.last_updated_on_aspace) %>">
           <td data-resource="<%= { collection: resource.resource_identifier, name: resource.resource_name }.to_json %>">
             <%= check_box("resource", resource.aspace_id) %>
           </td>
