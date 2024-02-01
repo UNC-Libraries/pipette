@@ -137,11 +137,14 @@
         const ONE_DAY =  86400000; // milliseconds
         const ONE_WEEK = ONE_DAY * 7;
         const ONE_MONTH = ONE_DAY * 30;
+
+        // Initialize the DataTable
         const resources_table = $('#resource-list').DataTable({
             columnDefs: [
                 { orderable: false, targets: [0, 6] },
                 { searchable: false, targets: [0, 5, 6] }
             ],
+            // Callback to hide spinner and display table when it's finished loading
             initComplete: function(settings, json) {
                 $('.spinner-border').addClass('d-none');
                 $('#resource-display').removeClass('opacity-0');
@@ -154,10 +157,21 @@
             },
             order: [[4, 'desc'], [5, 'desc'], [3, 'asc']] // updated on aspace, then indexed on arclight, then by collection name
         });
-
+        // Add our custom search filter select box to the table
         $("#resource-list_filter.dataTables_filter").prepend(recently_indexed);
 
-        $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+        // Reset search by updating the selected value and trigger the change event, so that our custom search filter fires
+        $('#reset_search').on('click', function() {
+            if (recently_indexed.val() !== '') {
+                recently_indexed.val('').trigger('change');
+            }
+            if ($('input[type=search]').val() !== '') {
+                resources_table.search('').draw();
+            }
+        });
+
+        // Add our custom search filter to DataTables
+        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             let val = recently_indexed.val();
             let date_from;
 
@@ -175,11 +189,10 @@
 
             return new Date(data[4]).getTime() > (current_time - date_from);
         });
-
+        // Update and redraw the table when our custom select filter value changes
         recently_indexed.on('change', function() {
             resources_table.draw();
         });
-        //resources_table.draw();
 
         const resource_processing = new ResourceProcessing();
         // Set list of selected resources
