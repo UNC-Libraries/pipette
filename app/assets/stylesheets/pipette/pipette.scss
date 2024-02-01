@@ -63,6 +63,11 @@ $center: center;
   }
 }
 
+#resource-list_filter {
+  display: inline-flex;
+  float: none;
+}
+
 #resource-list {
   .btn-danger {
     font-size: .75rem;
@@ -177,6 +182,18 @@ footer {
     --bs-link-color: $white;
     color: $white;
     text-decoration: none;
+  }
+}
+
+@media (max-width: 786px) {
+  #resource-list_filter {
+    display: block;
+    margin-top: 15px;
+    text-align: left;
+
+    input[type=search] {
+      margin-top: 15px;
+    }
   }
 }
 

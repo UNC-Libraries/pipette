@@ -1,6 +1,6 @@
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script>
     class ResourceProcessing {
         constructor() {
@@ -132,14 +132,50 @@
 </script>
 <script>
     $(function() {
+        let recently_indexed = $('#recently-indexed');
+        const current_time = new Date().getTime();
+        const ONE_DAY =  86400000; // milliseconds
+        const ONE_WEEK = ONE_DAY * 7;
+        const ONE_MONTH = ONE_DAY * 30;
         const resources_table = $('#resource-list').DataTable({
             columnDefs: [
                 { orderable: false, targets: [0, 6] },
-                { searchable: false, targets: [0, 4, 5, 6] }
+                { searchable: false, targets: [0, 5, 6] }
             ],
-            pageLength: 10,
+            pageLength: 50,
+            searching: true,
+            language: {
+                sSearch: '', // Removes search label text
+                searchPlaceholder: 'Search'
+            },
             order: [[4, 'desc'], [5, 'desc'], [3, 'asc']] // updated on aspace, then indexed on arclight, then by collection name
         });
+
+        $("#resource-list_filter.dataTables_filter").prepend($("#recently-indexed"));
+
+        $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+            let val = recently_indexed.val();
+            let date_from;
+
+            if (val === '') {
+                return true;
+            }
+
+            if (val === '1') {
+                date_from = ONE_DAY
+            } else if (val === '7') {
+                date_from = ONE_WEEK
+            } else if (val === '30') {
+                date_from = ONE_MONTH;
+            }
+
+            return new Date(data[4]).getTime() > (current_time - date_from);
+        });
+
+        recently_indexed.on('change', function() {
+            resources_table.draw();
+        });
+        //resources_table.draw();
 
         const resource_processing = new ResourceProcessing();
         // Set list of selected resources

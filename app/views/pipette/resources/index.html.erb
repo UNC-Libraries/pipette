@@ -10,6 +10,13 @@
       <div></div>
       <p>Indicates a record that needs updating on Archy</p>
     </div>
+    <%# The select box gets incorporated into the table for searching %>
+    <select id="recently-indexed" class="form-select" aria-label="Only view records recently updated on Aspace">
+      <option value="">-- View records recently updated on Aspace --</option>
+      <option value="1">Last Day</option>
+      <option value="7">Last Week</option>
+      <option value="30">Last 30 Days</option>
+    </select>
     <table id="resource-list" class="table table-striped table-bordered">
       <thead class="table-light">
       <tr>
