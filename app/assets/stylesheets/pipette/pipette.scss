@@ -66,6 +66,10 @@ $center: center;
 #resource-list_filter {
   display: inline-flex;
   float: none;
+
+  #recently-updated {
+    margin-right: 15px;
+  }
 }
 
 #resource-list {
