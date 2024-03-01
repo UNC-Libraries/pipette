@@ -5,62 +5,81 @@
   <h1 class="resource_list">Collections</h1>
 
   <% if @resources.length > 0 %>
-    <%= render 'selection_btns' %>
-    <table id="resource-list" class="table table-striped table-bordered">
-      <thead class="table-light">
-      <tr>
-        <th scope="col"><span class="visually-hidden">Select Collection for Indexing</span></th>
-        <th scope="col">Collecting Unit</th>
-        <th scope="col">Collection Id</th>
-        <th scope="col">Collection Name</th>
-        <th scope="col">Last Updated on Aspace</th>
-        <th scope="col">Last Indexed on Archy</th>
-        <th scope="col"><span class="visually-hidden">Delete Collection from Index</span></th>
-      </tr>
-      </thead>
-      <tbody class="table-group-divider">
-      <% @resources.each do |resource| %>
-        <tr>
-          <td data-resource="<%= { collection: resource.resource_identifier, name: resource.resource_name }.to_json %>">
-            <%= check_box("resource", resource.aspace_id) %>
-          </td>
-          <td><%= resource.collecting_unit.collecting_unit.upcase %></td>
-          <td><%= resource.resource_identifier %></td>
-          <td class="text-start"><%= resource.resource_name %></td>
-          <td class="text-start"><%= resource.last_updated_on_aspace.strftime("%Y-%m-%d %H:%M:%S") %></td>
-          <td class="text-start"><%= resource.last_indexed_on.strftime("%Y-%m-%d %H:%M:%S") %></td>
-          <td>
-            <%= form_with url: "/admin/delete_finding_aid", method: :post do |form| %>
-              <%= form.hidden_field :delete_aspace_id, id: "ead_deletion_#{resource.aspace_id }", value: resource.aspace_id %>
-              <%= form.submit "Delete", { id: "ead_deletion_btn_#{resource.resource_identifier }", class: 'btn btn-danger' } %>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
-    <div class="row resource-update">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <div id="resource-display" class="opacity-0">
       <%= render 'selection_btns' %>
-      <div class="row">
-        <div class="col index-submit">
-          <%= form_with url: "/admin/process_selected_finding_aids", method: :post do |form| %>
-            <%= form.hidden_field :force, class: 'should-force-indexing', value: 'false' %>
-            <%= form.hidden_field :aspace_id, value: '' %>
-            <%= form.submit "Index selected collections", { id: 'selected-resources',class: 'btn btn-primary', disabled: true } %>
-          <% end %>
-          <%= form_with url: "/admin/process_all_finding_aids", method: :post do |form| %>
-            <%= form.hidden_field :force, class: 'should-force-indexing', value: 'false' %>
-            <%= form.submit "Index all collections", { id: 'all-resources', class: 'btn btn-danger' } %>
-          <% end %>
-        </div>
+      <div class="indexing-note">
+        <div></div>
+        <p>Indicates a record that needs updating on Archy</p>
       </div>
-      <%= render 'force_option' %>
+      <button id="reset_search" class="btn btn-primary">Reset Search</button>
+
+      <%# The select box gets incorporated into the table for searching %>
+      <select id="recently-updated" class="form-select" aria-label="Only view records recently updated on Aspace">
+        <option value="">-- View records recently updated on Aspace --</option>
+        <option value="1">Last Day</option>
+        <option value="7">Last Week</option>
+        <option value="30">Last 30 Days</option>
+      </select>
+      <table id="resource-list" class="table table-striped table-bordered">
+        <thead class="table-light">
+        <tr>
+          <th scope="col"><span class="visually-hidden">Select Collection for Indexing</span></th>
+          <th scope="col">Collecting Unit</th>
+          <th scope="col">Collection Id</th>
+          <th scope="col">Collection Name</th>
+          <th scope="col">Last Updated on Aspace</th>
+          <th scope="col">Last Indexed on Archy</th>
+          <th scope="col"><span class="visually-hidden">Delete Collection from Index</span></th>
+        </tr>
+        </thead>
+        <tbody class="table-group-divider">
+        <% @resources.each do |resource| %>
+          <tr class="<%= 'table-danger' if needs_indexing?(resource.last_indexed_on, resource.last_updated_on_aspace) %>">
+            <td data-resource="<%= { collection: resource.resource_identifier, name: resource.resource_name }.to_json %>">
+              <%= check_box("resource", resource.aspace_id) %>
+            </td>
+            <td><%= resource.collecting_unit.collecting_unit.upcase %></td>
+            <td><%= resource.resource_identifier %></td>
+            <td class="text-start"><%= resource.resource_name %></td>
+            <td class="text-start"><%= resource.last_updated_on_aspace.strftime("%Y-%m-%d %H:%M:%S") %></td>
+            <td class="text-start"><%= resource.last_indexed_on.strftime("%Y-%m-%d %H:%M:%S") %></td>
+            <td>
+              <%= form_with url: "/admin/delete_finding_aid", method: :post do |form| %>
+                <%= form.hidden_field :delete_aspace_id, id: "ead_deletion_#{resource.aspace_id }", value: resource.aspace_id %>
+                <%= form.submit "Delete", { id: "ead_deletion_btn_#{resource.resource_identifier }", class: 'btn btn-danger' } %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
+      <div class="row resource-update">
+        <%= render 'selection_btns' %>
+        <div class="row">
+          <div class="col index-submit">
+            <%= form_with url: "/admin/process_selected_finding_aids", method: :post do |form| %>
+              <%= form.hidden_field :force, class: 'should-force-indexing', value: 'false' %>
+              <%= form.hidden_field :aspace_id, value: '' %>
+              <%= form.submit "Index selected collections", { id: 'selected-resources',class: 'btn btn-primary', disabled: true } %>
+            <% end %>
+            <button class="btn btn-danger" data-bs-target="#fullIndexingModal" data-bs-toggle="modal">Index all collections</button>
+          </div>
+        </div>
+        <%= render 'force_option' %>
+      </div>
     </div>
   <% else %>
     <p>No collections have been synced from Archivesspace</p>
+
     <%= form_with url: "/admin/process_all_finding_aids", method: :post do |form| %>
+      <%= form.hidden_field :force, class: 'should-force-indexing', value: 'true' %>
       <%= form.submit "Index all collections", { id: 'all-resources', class: 'btn btn-danger' } %>
     <% end %>
   <% end %>
-  <%= render 'modal' %>
+
+  <%= render 'selected_for_indexing_modal' %>
+  <%= render 'full_indexing_modal' %>
 </div>

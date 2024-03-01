@@ -28,6 +28,14 @@ $center: center;
   }
 }
 
+#fullIndexingModal {
+  text-align: left;
+  label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+}
+
 #job-status {
   h1 {
     margin: 25px auto 5px auto;
@@ -55,6 +63,20 @@ $center: center;
   }
 }
 
+#reset_search {
+  display: block;
+  margin: auto;
+}
+
+#resource-list_filter {
+  display: inline-flex;
+  float: none;
+
+  #recently-updated {
+    margin-right: 15px;
+  }
+}
+
 #resource-list {
   .btn-danger {
     font-size: .75rem;
@@ -64,6 +86,20 @@ $center: center;
 #resources-index {
   margin: 25px auto;
   width: 80%;
+}
+
+.indexing-note {
+  display: inline-flex;
+
+  div {
+    background-color: #f8d7da;
+    height: 20px;
+    width: 20px;
+  }
+
+  p {
+    padding-left: 5px;
+  }
 }
 
 .resource-update {
@@ -155,6 +191,18 @@ footer {
     --bs-link-color: $white;
     color: $white;
     text-decoration: none;
+  }
+}
+
+@media (max-width: 786px) {
+  #resource-list_filter {
+    display: block;
+    margin-top: 15px;
+    text-align: left;
+
+    input[type=search] {
+      margin-top: 15px;
+    }
   }
 }
 

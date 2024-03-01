@@ -2,15 +2,27 @@
 
 module Pipette
   class ProcessFindingAidsController < ApplicationController
+    include Pipette::AspaceHelper
+
     def process_all_ead
+      ead_ids = get_aspace_ids(params[:index_since])
+      if ead_ids.empty?
+        redirect_to job_status_index_path, notice: "No collections were updated within the specified time frame (#{params[:index_since]})."
+        return
+      end
+
       force = params[:force] || false
-      ead_ids = Pipette::AspaceClient.client.get('resources', { query: { all_ids: true } }).parsed
       ead_ids.each do |ead_id|
         ProcessEadXmlJob.perform_later(ead_id, force)
       end
 
-      flash[:notice] = "All collections sent for indexing (#{ead_ids.length} collections)"
-      redirect_to job_status_index_path
+      flash_text = if params[:index_since] == 'all'
+                     "All collections sent for indexing (#{ead_ids.length} collections)"
+                   else
+                     "#{ead_ids.length} collections sent for indexing"
+                   end
+
+      redirect_to job_status_index_path, notice: flash_text
     end
 
     def process_selected_ead

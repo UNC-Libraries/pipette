@@ -1,0 +1,28 @@
+<div class="modal fade" id="fullIndexingModal" tabindex="-1" aria-labelledby="fullIndexingModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="fullIndexingModalLabel">Reindex All EAD Updated on Aspace Within a Given Timeframe</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <%= form_with url: "/admin/process_all_finding_aids", method: :post do |form| %>
+        <div class="modal-body">
+          <%= form.label :index_since, "Index records updated in the", class: "form-check-label" %>
+          <%= form.select :index_since, [['Any Time', 'all'], ['Last Hour', 'hour'], ['Last Twelve Hours', 'half-day'],
+                                         ['Last Twenty-four Hours', 'full-day'], ['Last Week', 'week']], {},
+                          { 'aria-describedby': 'index_since_block',  class: 'form-select' } %>
+          <p id="index_since_block" class="form-text">
+            Index all resources updated on Archivesspace within a certain time frame.
+            "Any Time" specifies reindexing all resources regardless of their last Archivesspace update.
+            Note: The "force" indexing option is enabled by default
+          </p>
+        </div>
+        <input type="hidden" name="force" value="true">
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <%= form.submit "Index collections", { id: 'all-resources', class: 'btn btn-danger' } %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
