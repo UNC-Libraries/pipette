@@ -11,9 +11,8 @@ module Pipette
         return
       end
 
-      force = params[:force] || false
       ead_ids.each do |ead_id|
-        ProcessEadXmlJob.perform_later(ead_id, force)
+        ProcessEadXmlJob.perform_later(ead_id, true)
       end
 
       flash_text = if params[:index_since] == 'all'

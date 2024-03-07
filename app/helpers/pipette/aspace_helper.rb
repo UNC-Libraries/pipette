@@ -6,7 +6,7 @@ module Pipette
       query_vars = {
         all_ids: true
       }
-      query_vars[:modified_since] = time_offset(index_since) unless index_since.nil?
+      query_vars[:modified_since] = time_offset(index_since) unless index_since.nil? || index_since == 'all'
 
       Pipette::AspaceClient.client.get('resources', { query: query_vars }).parsed
     end
@@ -14,7 +14,6 @@ module Pipette
     # Time periods are in seconds
     def time_offset(index_since)
       offset = index_since.downcase
-      return nil if offset == 'all'
 
       case offset
       when 'half-hour'
