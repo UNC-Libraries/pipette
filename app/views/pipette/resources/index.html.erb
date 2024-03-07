@@ -39,7 +39,7 @@
         <% @resources.each do |resource| %>
           <tr class="<%= 'table-danger' if needs_indexing?(resource.last_indexed_on, resource.last_updated_on_aspace) %>">
             <td data-resource="<%= { collection: resource.resource_identifier, name: resource.resource_name }.to_json %>">
-              <%= check_box("resource", resource.aspace_id) %>
+              <%= check_box("resource", resource.resource_uri) %>
             </td>
             <td><%= resource.collecting_unit.collecting_unit.upcase %></td>
             <td><%= resource.resource_identifier %></td>
@@ -48,7 +48,7 @@
             <td class="text-start"><%= resource.last_indexed_on.strftime("%Y-%m-%d %H:%M:%S") %></td>
             <td>
               <%= form_with url: "/admin/delete_finding_aid", method: :post do |form| %>
-                <%= form.hidden_field :delete_aspace_id, id: "ead_deletion_#{resource.aspace_id }", value: resource.aspace_id %>
+                <%= form.hidden_field :delete_aspace_id, id: "ead_deletion_#{resource.resource_uri }", value: resource.resource_uri %>
                 <%= form.submit "Delete", { id: "ead_deletion_btn_#{resource.resource_identifier }", class: 'btn btn-danger' } %>
               <% end %>
             </td>

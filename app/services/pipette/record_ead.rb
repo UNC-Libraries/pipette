@@ -15,7 +15,7 @@ module Pipette
 
     def create_resource_record(collecting_unit, resource)
       Resource.create(pipette_collecting_unit_id: collecting_unit,
-                      aspace_id: aspace_id(resource['uri']),
+                      resource_uri: aspace_id(resource['uri']),
                       resource_name: resource['title'],
                       resource_identifier: resource['ead_id'],
                       last_updated_on_aspace: format_aspace_date(resource['system_mtime']),
@@ -24,7 +24,7 @@ module Pipette
 
     def edit_resource_record(pipette_record, collecting_unit, resource)
       Resource.update(pipette_record.id, pipette_collecting_unit_id: collecting_unit,
-                                         aspace_id: aspace_id(resource['uri']),
+                                         resource_uri: aspace_id(resource['uri']),
                                          resource_name: resource['title'],
                                          resource_identifier: resource['ead_id'],
                                          last_updated_on_aspace: format_aspace_date(resource['system_mtime']),
