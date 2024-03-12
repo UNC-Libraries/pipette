@@ -25,7 +25,7 @@ module Pipette
           pipette_collecting_unit_id: collecting_unit.id,
           resource_identifier: resource_record['ead_id']
         )
-        should_index = is_deletion || should_force?(force) ||
+        should_index = is_deletion || force ||
                        needs_indexing?(pipette_record&.last_indexed_on, resource_record['user_mtime'])
 
         if should_index
@@ -47,11 +47,6 @@ module Pipette
       record_for_status_info[:collecting_unit] = collecting_unit_list(collecting_units)
       record_for_status_info[:note] = notes.join('<br/>')
       record_for_status_info
-    end
-
-    # "force" should come in as a string since it's from a form
-    def should_force?(force)
-      force.to_s.downcase == 'true'
     end
 
     def indexing_note(was_indexed, collecting_unit_name)
