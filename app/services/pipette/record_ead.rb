@@ -4,7 +4,7 @@ module Pipette
   class RecordEad
     def update_database(collecting_unit, resource, is_deletion)
       pipette_record = Resource.find_by(pipette_collecting_unit_id: collecting_unit, resource_identifier: resource['ead_id'])
-      if is_deletion
+      if is_deletion && !pipette_record.nil?
         delete_resource_record(pipette_record)
       elsif pipette_record.nil?
         create_resource_record(collecting_unit, resource)
