@@ -34,7 +34,7 @@
 
         clearSelectedOnSubmit() {
             $('#selected-resources').on('click', () => {
-                this.#clearResources();
+                this.clearResources();
             })
         }
 
@@ -45,7 +45,7 @@
                     const current_cell = $(this.node()).find('input[type="checkbox"]');
                     current_cell.prop('checked', false);
                 });
-                this.#clearResources()
+                this.clearResources();
                 this.setModalDisplay();
                 this.#setSelectedFormValue();
             });
@@ -109,14 +109,14 @@
             });
         }
 
+        clearResources() {
+            this.selected_resources = [];
+            sessionStorage.removeItem('resourcesToIndex');
+        }
+
         // Private methods
         #setStorage() {
             sessionStorage.setItem('resourcesToIndex', JSON.stringify(this.selected_resources));
-        }
-
-        #clearResources() {
-            this.selected_resources = [];
-            sessionStorage.removeItem('resourcesToIndex');
         }
 
         #setSelectedFormValue() {
@@ -149,7 +149,7 @@
                 $('.spinner-border').addClass('d-none');
                 $('#resource-display').removeClass('opacity-0');
             },
-            pageLength: 50,
+            pageLength: 25,
             searching: true,
             language: {
                 sSearch: '', // Removes search label text
@@ -195,6 +195,8 @@
         });
 
         const resource_processing = new ResourceProcessing();
+        // Clear existing resources when page is loaded
+        resource_processing.clearResources();
         // Set list of selected resources
         resource_processing.selectedResourcesEventHandler(resources_table);
         // Setup various event listeners
