@@ -19,7 +19,7 @@ module Pipette
                                          page_size: 50,
                                          throttle: 0,
                                          verify_ssl: false,
-                                         timeout: 120
+                                         timeout: 300
                                        })
     end
 
