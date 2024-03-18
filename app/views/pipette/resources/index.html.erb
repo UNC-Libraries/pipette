@@ -43,7 +43,7 @@
             </td>
             <td><%= resource.collecting_unit.collecting_unit.upcase %></td>
             <td><%= resource.resource_identifier %></td>
-            <td class="text-start"><%= resource.resource_name %></td>
+            <td class="text-start"><a target="_blank" href="/catalog/<%= resource.resource_identifier.gsub(/-z/, '') %>"><%= resource.resource_name %></a></td>
             <td class="text-start"><%= resource.last_updated_on_aspace.strftime("%Y-%m-%d %H:%M:%S") %></td>
             <td class="text-start"><%= resource.last_indexed_on.strftime("%Y-%m-%d %H:%M:%S") %></td>
             <td>
