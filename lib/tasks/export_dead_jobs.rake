@@ -12,12 +12,13 @@ namespace :pipette do
   task :export_dead_jobs, [:failed_since] => :environment do |_t, args|
     ds = Sidekiq::DeadSet.new
 
-    CSV.open('/tmp/archy_dead_jobs_report.csv', 'w') do |csv|
-      csv << ['Job Type', 'Args', 'Error']
+    today = DateTime.now.strftime('%d-%m-%Y')
+    CSV.open("#{ENV['SIDEKIQ_DEAD_JOBS_PATH']}/dead_jobs_report_#{today}.csv", 'w') do |csv|
+      csv << ['Date', 'Job Type', 'Args', 'Error']
       ds.each do |job|
         if (args[:failed_since].nil? && job.at.today?) ||
            (job.at >= args[:failed_since].to_i.day.ago && job.at <= DateTime.now.end_of_day)
-          csv << [job.display_class, job.display_args.join('|'), job['error_message']]
+          csv << [job.at.to_s, job.display_class, job.display_args.join('|'), job['error_message']]
         end
       end
     end
