@@ -26,11 +26,10 @@ module Pipette
 
     def process_selected_ead
       aspace_ids = params[:aspace_id].split(',')
-      force = params[:force] || false
       aspace_ids.each do |ead_id|
         next if ead_id.strip.to_i.zero? # Returns 0 if not an integer
 
-        ProcessEadXmlJob.perform_later(ead_id, force)
+        ProcessEadXmlJob.perform_later(ead_id, should_force_indexing(params[:force]))
       end
 
       num_of_collections = aspace_ids.length
@@ -46,6 +45,14 @@ module Pipette
 
       flash[:notice] = "#{aspace_id} deleted from ArCHy"
       redirect_to job_status_index_path
+    end
+
+    private
+
+    def should_force_indexing(param)
+      return false if param.nil?
+
+      ['true', true].include?(param)
     end
   end
 end
