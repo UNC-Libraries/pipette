@@ -114,6 +114,16 @@
             sessionStorage.removeItem('resourcesToIndex');
         }
 
+        /**
+         * Submit items for indexing from modal window
+         * Triggers submission of index-selected-items form
+         */
+        indexItems() {
+            $('#submit-requested-resources').on('click', function() {
+                $('#selected-resources').trigger('click');
+            });
+        }
+
         // Private methods
         #setStorage() {
             sessionStorage.setItem('resourcesToIndex', JSON.stringify(this.selected_resources));
@@ -122,11 +132,11 @@
         #setSelectedFormValue() {
             const aspace_ids = this.selected_resources.map(d => d.aspace_id).join(',');
             $('#aspace_id').val(aspace_ids);
-            this.#setSelectedSubmitBtn();
+            this.#setSelectedSubmitBtns();
         }
 
-        #setSelectedSubmitBtn() {
-            $('#selected-resources').prop('disabled', this.selected_resources.length === 0);
+        #setSelectedSubmitBtns() {
+            $('#selected-resources, #submit-requested-resources').prop('disabled', this.selected_resources.length === 0);
         }
     }
 </script>
@@ -201,6 +211,7 @@
         resource_processing.selectedResourcesEventHandler(resources_table);
         // Setup various event listeners
         resource_processing.forceIndexing();
+        resource_processing.indexItems();
         resource_processing.selectAll();
         resource_processing.clearSelectAll(resources_table);
         resource_processing.clearSelectedOnSubmit();
