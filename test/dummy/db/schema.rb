@@ -19,7 +19,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_02_153359) do
 
   create_table "pipette_resources", force: :cascade do |t|
     t.integer "pipette_collecting_unit_id"
-    t.integer "aspace_id"
+    t.integer "resource_uri"
     t.string "resource_name"
     t.string "resource_identifier"
     t.datetime "last_updated_on_aspace"
