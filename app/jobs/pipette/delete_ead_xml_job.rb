@@ -15,10 +15,10 @@ module Pipette
       store collection_id: job[:collection_id]
       store collection_title: job[:collection_title]
       Rails.logger.info "EAD deleted for finding aid with ArchivesSpace ID: #{aspace_id}"
-    rescue Errno::ENOENT => e
-      Rails.logger.error("Unable to delete EAD for finding aid with ArchivesSpace ID: #{aspace_id}. Reason: #{e.message}")
-    rescue Git::FailedError => e
-      Rails.logger.error("Unable to commit deletion of EAD xml for finding aid with ArchivesSpace ID to git: #{aspace_id}. Reason: #{e.message}")
+    # rescue Errno::ENOENT => e
+    #   Rails.logger.error("Unable to delete EAD for finding aid with ArchivesSpace ID: #{aspace_id}. Reason: #{e.message}")
+    # rescue Git::FailedError => e
+    #   Rails.logger.error("Unable to commit deletion of EAD xml for finding aid with ArchivesSpace ID to git: #{aspace_id}. Reason: #{e.message}")
     end
   end
 end
